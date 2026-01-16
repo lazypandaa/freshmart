@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useCart } from '../context/CartContext'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../components/ui/Button'
@@ -22,6 +22,26 @@ export function Checkout() {
     cardCVV: ''
   })
 
+  useEffect(() => {
+    // Load user profile data from localStorage
+    const name = localStorage.getItem('user_name') || ''
+    const email = localStorage.getItem('user_email') || ''
+    const phone = localStorage.getItem('user_phone') || ''
+    const address = localStorage.getItem('user_address') || ''
+    const city = localStorage.getItem('user_city') || ''
+    const zipCode = localStorage.getItem('user_zipCode') || ''
+
+    setFormData(prev => ({
+      ...prev,
+      name,
+      email,
+      phone,
+      address,
+      city,
+      zipCode
+    }))
+  }, [])
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
@@ -29,6 +49,30 @@ export function Checkout() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
+    
+    // Create order object
+    const order = {
+      id: Date.now().toString(),
+      items: cart,
+      total: cartTotal,
+      date: new Date().toISOString(),
+      status: 'Completed',
+      shippingAddress: {
+        name: formData.name,
+        address: formData.address,
+        city: formData.city,
+        zipCode: formData.zipCode
+      }
+    }
+    
+    // Save order to localStorage
+    const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]')
+    existingOrders.unshift(order)
+    localStorage.setItem('orders', JSON.stringify(existingOrders))
+    
+    // Update total spent
+    const totalSpent = parseFloat(localStorage.getItem('total_spent') || '0')
+    localStorage.setItem('total_spent', (totalSpent + cartTotal).toFixed(2))
     
     // Simulate order processing
     setTimeout(() => {
