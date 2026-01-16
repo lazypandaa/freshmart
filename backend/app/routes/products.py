@@ -6,7 +6,7 @@ from typing import List
 router = APIRouter()
 
 @router.get("/products", response_model=List[ProductResponse])
-async def get_products(department: str = None, aisle: str = None, limit: int = 100):
+async def get_products(department: str = None, aisle: str = None, search: str = None, limit: int = 100):
     db = get_database()
     
     query = {}
@@ -14,6 +14,8 @@ async def get_products(department: str = None, aisle: str = None, limit: int = 1
         query["department"] = department
     if aisle:
         query["aisle"] = aisle
+    if search:
+        query["name"] = {"$regex": search, "$options": "i"}
     
     cursor = db.products.find(query).limit(limit)
     products = await cursor.to_list(length=limit)

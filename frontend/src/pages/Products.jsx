@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { Card, CardContent } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { Star, ShoppingCart } from 'lucide-react'
 import { useCart } from '../context/CartContext'
 
 export function Products() {
+  const [searchParams] = useSearchParams()
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [selectedDepartment, setSelectedDepartment] = useState('all')
@@ -13,12 +15,17 @@ export function Products() {
 
   useEffect(() => {
     fetchDepartments()
-    fetchProducts()
   }, [])
 
   useEffect(() => {
-    fetchProducts(selectedDepartment)
-  }, [selectedDepartment])
+    const searchQuery = searchParams.get('search')
+    if (searchQuery) {
+      fetchProducts('all', searchQuery)
+      setSelectedDepartment('all')
+    } else {
+      fetchProducts(selectedDepartment)
+    }
+  }, [selectedDepartment, searchParams])
 
   const fetchDepartments = async () => {
     try {
@@ -30,12 +37,16 @@ export function Products() {
     }
   }
 
-  const fetchProducts = async (department = 'all') => {
+  const fetchProducts = async (department = 'all', search = null) => {
     try {
       setLoading(true)
-      const url = department === 'all' 
-        ? 'http://localhost:8000/api/products'
-        : `http://localhost:8000/api/products?department=${department}`
+      let url = 'http://localhost:8000/api/products?'
+      
+      if (search) {
+        url += `search=${encodeURIComponent(search)}`
+      } else if (department !== 'all') {
+        url += `department=${department}`
+      }
       
       const response = await fetch(url)
       const data = await response.json()
@@ -55,7 +66,9 @@ export function Products() {
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-6 py-12">
         <div className="mb-12">
-          <h1 className="text-5xl font-bold mb-4">Our Products</h1>
+          <h1 className="text-5xl font-bold mb-4">
+            {searchParams.get('search') ? `Search Results for "${searchParams.get('search')}"` : 'Our Products'}
+          </h1>
           <p className="text-gray-600 text-lg">Fresh groceries delivered to your doorstep</p>
         </div>
 

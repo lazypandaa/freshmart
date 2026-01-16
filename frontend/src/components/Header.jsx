@@ -1,18 +1,62 @@
 import { ShoppingCart, User, Search, Menu, X } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button } from './ui/Button'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useCart } from '../context/CartContext'
 
 export function Header() {
+  const navigate = useNavigate()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [suggestions, setSuggestions] = useState([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const searchRef = useRef(null)
   const { cartCount } = useCart()
 
   useEffect(() => {
     const token = localStorage.getItem('token')
     setIsLoggedIn(!!token)
   }, [])
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (searchRef.current && !searchRef.current.contains(e.target)) {
+        setShowSuggestions(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  useEffect(() => {
+    if (searchQuery.trim().length > 0) {
+      fetch(`http://localhost:8000/api/products?search=${searchQuery}`)
+        .then(res => res.json())
+        .then(data => {
+          setSuggestions(data.slice(0, 5))
+          setShowSuggestions(true)
+        })
+        .catch(() => setSuggestions([]))
+    } else {
+      setSuggestions([])
+      setShowSuggestions(false)
+    }
+  }, [searchQuery])
+
+  const handleSearch = (e) => {
+    e.preventDefault()
+    if (searchQuery.trim()) {
+      navigate(`/products?search=${searchQuery}`)
+      setShowSuggestions(false)
+    }
+  }
+
+  const handleSuggestionClick = (product) => {
+    setSearchQuery('')
+    setShowSuggestions(false)
+    navigate(`/products?search=${product.name}`)
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md shadow-sm">
@@ -45,13 +89,41 @@ export function Header() {
         </div>
         
         <div className="flex items-center gap-4">
-          <div className="hidden md:flex items-center border-2 border-gray-200 rounded-full px-4 py-2.5 w-80 focus-within:border-black transition-colors">
-            <Search className="h-4 w-4 text-gray-400" />
-            <input
-              type="search"
-              placeholder="Search for fresh products..."
-              className="ml-3 flex-1 bg-transparent text-sm outline-none placeholder:text-gray-400"
-            />
+          <div className="hidden md:block relative" ref={searchRef}>
+            <form onSubmit={handleSearch} className="flex items-center border-2 border-gray-200 rounded-full px-4 py-2.5 w-80 focus-within:border-black transition-colors">
+              <Search className="h-4 w-4 text-gray-400" />
+              <input
+                type="search"
+                placeholder="Search for fresh products..."
+                className="ml-3 flex-1 bg-transparent text-sm outline-none placeholder:text-gray-400"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => searchQuery && setShowSuggestions(true)}
+              />
+            </form>
+            {showSuggestions && suggestions.length > 0 && (
+              <div className="absolute top-full mt-2 w-full bg-white border-2 border-gray-200 rounded-lg shadow-lg overflow-hidden z-50">
+                {suggestions.map((product) => (
+                  <button
+                    key={product.product_id}
+                    onClick={() => handleSuggestionClick(product)}
+                    className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 transition-colors text-left"
+                  >
+                    <img
+                      src={product.image_url}
+                      alt={product.name}
+                      className="w-10 h-10 object-cover rounded"
+                      onError={(e) => e.target.src = 'https://via.placeholder.com/40'}
+                    />
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">{product.name}</p>
+                      <p className="text-xs text-gray-500">{product.department}</p>
+                    </div>
+                    <p className="text-sm font-bold">${product.price.toFixed(2)}</p>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
           
           <Button variant="ghost" size="sm" className="relative hover:bg-gray-100 rounded-full p-3">
