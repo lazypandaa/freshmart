@@ -26,7 +26,8 @@ export function Home() {
       // Fetch departments
       const deptRes = await fetch(`${API_BASE_URL}/api/departments`)
       const deptData = await deptRes.json()
-      setDepartments(Array.isArray(deptData.departments) ? deptData.departments : [])
+      const deptNames = Array.isArray(deptData.departments) ? deptData.departments.map(d => d.name || d) : []
+      setDepartments(deptNames)
     } catch (error) {
       console.error('Error fetching data:', error)
     } finally {

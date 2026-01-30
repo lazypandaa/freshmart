@@ -32,7 +32,8 @@ export function Products() {
     try {
       const response = await fetch(`${API_BASE_URL}/api/departments`)
       const data = await response.json()
-      setDepartments(Array.isArray(data.departments) ? data.departments : [])
+      const deptNames = Array.isArray(data.departments) ? data.departments.map(d => d.name || d) : []
+      setDepartments(deptNames)
     } catch (error) {
       console.error('Error fetching departments:', error)
     }
