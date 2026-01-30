@@ -35,7 +35,8 @@ export function Header() {
       fetch(`${API_BASE_URL}/api/products?search=${searchQuery}&limit=5`)
         .then(res => res.json())
         .then(data => {
-          setSuggestions(data.slice(0, 5))
+          const products = data.products || data
+          setSuggestions(products.slice(0, 5))
           setShowSuggestions(true)
         })
         .catch(() => setSuggestions([]))

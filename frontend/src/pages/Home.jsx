@@ -21,7 +21,7 @@ export function Home() {
       // Fetch products
       const productsRes = await fetch(`${API_BASE_URL}/api/products?limit=8`)
       const productsData = await productsRes.json()
-      setProducts(productsData)
+      setProducts(productsData.products || productsData)
 
       // Fetch departments
       const deptRes = await fetch(`${API_BASE_URL}/api/departments`)

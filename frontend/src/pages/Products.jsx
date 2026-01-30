@@ -51,7 +51,7 @@ export function Products() {
       
       const response = await fetch(url)
       const data = await response.json()
-      setProducts(data)
+      setProducts(data.products || data)
     } catch (error) {
       console.error('Error fetching products:', error)
     } finally {
