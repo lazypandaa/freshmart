@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Button } from './ui/Button'
 import { useState, useEffect, useRef } from 'react'
 import { useCart } from '../context/CartContext'
+import { API_BASE_URL } from '../config/api'
 
 export function Header() {
   const navigate = useNavigate()

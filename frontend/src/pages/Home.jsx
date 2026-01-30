@@ -4,6 +4,7 @@ import { Card, CardContent } from '../components/ui/Card'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { useState, useEffect } from 'react'
+import { API_BASE_URL } from '../config/api'
 
 export function Home() {
   const { addToCart } = useCart()
@@ -18,12 +19,12 @@ export function Home() {
   const fetchData = async () => {
     try {
       // Fetch products
-      const productsRes = await fetch('${API_BASE_URL}/api/products?limit=8')
+      const productsRes = await fetch(`${API_BASE_URL}/api/products?limit=8`)
       const productsData = await productsRes.json()
       setProducts(productsData)
 
       // Fetch departments
-      const deptRes = await fetch('${API_BASE_URL}/api/departments')
+      const deptRes = await fetch(`${API_BASE_URL}/api/departments`)
       const deptData = await deptRes.json()
       setDepartments(deptData.departments)
     } catch (error) {

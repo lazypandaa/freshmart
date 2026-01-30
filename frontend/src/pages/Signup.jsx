@@ -4,6 +4,7 @@ import { Button } from '../components/ui/Button'
 import { Input } from '../components/ui/Input'
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card'
 import { User, Mail, Phone, Lock, Chrome, Facebook } from 'lucide-react'
+import { API_BASE_URL } from '../config/api'
 
 export function Signup() {
   const [formData, setFormData] = useState({
@@ -36,7 +37,7 @@ export function Signup() {
     setLoading(true)
 
     try {
-      const response = await fetch('${API_BASE_URL}/api/auth/signup', {
+      const response = await fetch(`${API_BASE_URL}/api/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

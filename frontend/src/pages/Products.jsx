@@ -4,6 +4,7 @@ import { Card, CardContent } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { Star, ShoppingCart } from 'lucide-react'
 import { useCart } from '../context/CartContext'
+import { API_BASE_URL } from '../config/api'
 
 export function Products() {
   const [searchParams] = useSearchParams()
@@ -29,7 +30,7 @@ export function Products() {
 
   const fetchDepartments = async () => {
     try {
-      const response = await fetch('${API_BASE_URL}/api/departments')
+      const response = await fetch(`${API_BASE_URL}/api/departments`)
       const data = await response.json()
       setDepartments(data.departments)
     } catch (error) {
@@ -40,7 +41,7 @@ export function Products() {
   const fetchProducts = async (department = 'all', search = null) => {
     try {
       setLoading(true)
-      let url = '${API_BASE_URL}/api/products?'
+      let url = `${API_BASE_URL}/api/products?`
       
       if (search) {
         url += `search=${encodeURIComponent(search)}`
