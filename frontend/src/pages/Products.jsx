@@ -29,7 +29,7 @@ export function Products() {
 
   const fetchDepartments = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/departments')
+      const response = await fetch('${API_BASE_URL}/api/departments')
       const data = await response.json()
       setDepartments(data.departments)
     } catch (error) {
@@ -40,7 +40,7 @@ export function Products() {
   const fetchProducts = async (department = 'all', search = null) => {
     try {
       setLoading(true)
-      let url = 'http://localhost:8000/api/products?'
+      let url = '${API_BASE_URL}/api/products?'
       
       if (search) {
         url += `search=${encodeURIComponent(search)}`
