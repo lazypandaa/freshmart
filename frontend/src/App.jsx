@@ -3,6 +3,7 @@ import { CartProvider } from './context/CartContext'
 import { Header } from './components/Header'
 import { Footer } from './components/Footer'
 import { CartNotification } from './components/CartNotification'
+import { DebugEnv } from './components/DebugEnv'
 import { Home } from './pages/Home'
 import { Login } from './pages/Login'
 import { Signup } from './pages/Signup'
@@ -17,6 +18,7 @@ function App() {
     <CartProvider>
       <Router>
         <div className="flex flex-col min-h-screen">
+          <DebugEnv />
           <Header />
           <CartNotification />
           <main className="flex-1">
