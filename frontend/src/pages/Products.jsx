@@ -32,7 +32,7 @@ export function Products() {
     try {
       const response = await fetch(`${API_BASE_URL}/api/departments`)
       const data = await response.json()
-      setDepartments(data.departments)
+      setDepartments(Array.isArray(data.departments) ? data.departments : [])
     } catch (error) {
       console.error('Error fetching departments:', error)
     }
@@ -51,7 +51,7 @@ export function Products() {
       
       const response = await fetch(url)
       const data = await response.json()
-      setProducts(data.products || data)
+      setProducts(Array.isArray(data.products) ? data.products : Array.isArray(data) ? data : [])
     } catch (error) {
       console.error('Error fetching products:', error)
     } finally {

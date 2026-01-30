@@ -36,7 +36,7 @@ export function Header() {
         .then(res => res.json())
         .then(data => {
           const products = data.products || data
-          setSuggestions(products.slice(0, 5))
+          setSuggestions(Array.isArray(products) ? products.slice(0, 5) : [])
           setShowSuggestions(true)
         })
         .catch(() => setSuggestions([]))

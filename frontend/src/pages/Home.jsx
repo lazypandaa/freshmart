@@ -21,12 +21,12 @@ export function Home() {
       // Fetch products
       const productsRes = await fetch(`${API_BASE_URL}/api/products?limit=8`)
       const productsData = await productsRes.json()
-      setProducts(productsData.products || productsData)
+      setProducts(Array.isArray(productsData.products) ? productsData.products : [])
 
       // Fetch departments
       const deptRes = await fetch(`${API_BASE_URL}/api/departments`)
       const deptData = await deptRes.json()
-      setDepartments(deptData.departments)
+      setDepartments(Array.isArray(deptData.departments) ? deptData.departments : [])
     } catch (error) {
       console.error('Error fetching data:', error)
     } finally {
