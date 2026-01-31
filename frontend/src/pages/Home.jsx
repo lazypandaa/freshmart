@@ -91,19 +91,19 @@ export function Home() {
       </section>
 
       {/* Deals Banner */}
-      <section className="bg-black text-white py-4">
+      <section className="bg-black text-white py-6">
         <div className="container mx-auto px-6">
-          <div className="flex overflow-x-auto gap-8 scrollbar-hide">
+          <div className="flex overflow-x-auto gap-8 pb-2">
             {deals.map((deal, idx) => (
-              <div key={idx} className="flex items-center gap-4 min-w-fit">
+              <div key={idx} className="flex items-center gap-4 min-w-fit whitespace-nowrap">
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl font-bold">{deal.discount}</span>
+                  <span className="text-2xl font-bold text-white">{deal.discount}</span>
                   <div>
-                    <p className="text-sm font-semibold">{deal.title}</p>
-                    <p className="text-xs text-gray-400">{deal.desc}</p>
+                    <p className="text-sm font-semibold text-white">{deal.title}</p>
+                    <p className="text-xs text-gray-300">{deal.desc}</p>
                   </div>
                 </div>
-                {idx < deals.length - 1 && <div className="h-8 w-px bg-gray-700"></div>}
+                {idx < deals.length - 1 && <div className="h-8 w-px bg-gray-600 mx-2"></div>}
               </div>
             ))}
           </div>
