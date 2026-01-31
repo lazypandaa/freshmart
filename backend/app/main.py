@@ -8,7 +8,11 @@ app = FastAPI(title="FreshMart API", version="1.0.0")
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:5174"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "https://agreeable-flower-0f3d53410.2.azurestaticapps.net"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

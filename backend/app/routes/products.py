@@ -5,7 +5,7 @@ from typing import List
 
 router = APIRouter()
 
-@router.get("/products", response_model=List[ProductResponse])
+@router.get("/productsnew", response_model=List[ProductResponse])
 async def get_products(department: str = None, aisle: str = None, search: str = None, limit: int = 100):
     db = get_database()
     
@@ -17,7 +17,7 @@ async def get_products(department: str = None, aisle: str = None, search: str = 
     if search:
         query["name"] = {"$regex": search, "$options": "i"}
     
-    cursor = db.products.find(query).limit(limit)
+    cursor = db.productsnew.find(query).limit(limit)
     products = await cursor.to_list(length=limit)
     
     # Convert MongoDB _id to id
@@ -26,13 +26,13 @@ async def get_products(department: str = None, aisle: str = None, search: str = 
     
     return products
 
-@router.get("/products/{product_id}", response_model=ProductResponse)
+@router.get("/productsnew/{product_id}", response_model=ProductResponse)
 async def get_product(product_id: str):
     db = get_database()
     from bson import ObjectId
     
     try:
-        product = await db.products.find_one({"_id": ObjectId(product_id)})
+        product = await db.productsnew.find_one({"_id": ObjectId(product_id)})
     except:
         raise HTTPException(status_code=400, detail="Invalid product ID")
     
@@ -45,11 +45,11 @@ async def get_product(product_id: str):
 @router.get("/departments")
 async def get_departments():
     db = get_database()
-    departments = await db.products.distinct("department")
+    departments = await db.productsnew.distinct("department")
     return {"departments": departments}
 
 @router.get("/aisles")
 async def get_aisles():
     db = get_database()
-    aisles = await db.products.distinct("aisle")
+    aisles = await db.productsnew.distinct("aisle")
     return {"aisles": aisles}
