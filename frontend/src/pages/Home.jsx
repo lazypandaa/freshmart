@@ -19,7 +19,7 @@ export function Home() {
   const fetchData = async () => {
     try {
       // Fetch products
-      const productsRes = await fetch(`${API_BASE_URL}/api/products?limit=8`)
+      const productsRes = await fetch(`${API_BASE_URL}/api/productsnew?limit=8`)
       const productsData = await productsRes.json()
       setProducts(Array.isArray(productsData.products) ? productsData.products : [])
 
@@ -78,17 +78,13 @@ export function Home() {
               Quality guaranteed with same-day delivery.
             </p>
             <div className="flex gap-4">
-              <Link to="/products">
-                <Button size="lg" className="group">
-                  Shop Now
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
-              <Link to="/products">
-                <Button size="lg" variant="outline" className="border-2">
-                  View Deals
-                </Button>
-              </Link>
+              <Button size="lg" className="group">
+                Shop Now
+                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </Button>
+              <Button size="lg" variant="outline" className="border-2">
+                View Deals
+              </Button>
             </div>
           </div>
         </div>
@@ -144,17 +140,15 @@ export function Home() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
             {categories.map((cat, idx) => (
-              <Link key={idx} to="/products">
-                <Card className="group cursor-pointer hover:shadow-2xl transition-all hover:-translate-y-2 border-2 hover:border-black">
-                  <CardContent className="p-8 text-center">
-                    <div className={`${cat.color} w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 text-5xl group-hover:scale-110 transition-transform`}>
-                      {cat.image}
-                    </div>
-                    <h3 className="font-bold mb-2 text-sm">{cat.name}</h3>
-                    <p className="text-xs text-gray-500">{cat.count}</p>
-                  </CardContent>
+              <Card key={idx} className="group cursor-pointer hover:shadow-2xl transition-all hover:-translate-y-2 border-2 hover:border-black">
+                <CardContent className="p-8 text-center">
+                  <div className={`${cat.color} w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 text-5xl group-hover:scale-110 transition-transform`}>
+                    {cat.image}
+                  </div>
+                  <h3 className="font-bold mb-2 text-sm">{cat.name}</h3>
+                  <p className="text-xs text-gray-500">{cat.count}</p>
+                </CardContent>
               </Card>
-              </Link>
             ))}
           </div>
         </div>

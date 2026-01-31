@@ -32,10 +32,8 @@ export function Login() {
       if (response.ok) {
         localStorage.setItem('token', data.access_token)
         localStorage.setItem('user_email', email)
-        // Navigate to home page
-        navigate('/', { replace: true })
-        // Reload after navigation to update header
-        setTimeout(() => window.location.reload(), 100)
+        window.location.reload() // Reload to update header
+        navigate('/')
       } else {
         setError(data.detail || 'Login failed')
       }

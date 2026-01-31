@@ -42,7 +42,7 @@ export function Products() {
   const fetchProducts = async (department = 'all', search = null) => {
     try {
       setLoading(true)
-      let url = `${API_BASE_URL}/api/products?`
+      let url = `${API_BASE_URL}/api/productsnew?`
       
       if (search) {
         url += `search=${encodeURIComponent(search)}`

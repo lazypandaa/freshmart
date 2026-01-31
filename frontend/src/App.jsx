@@ -11,7 +11,6 @@ import { Cart } from './pages/Cart'
 import { Checkout } from './pages/Checkout'
 import { OrderSuccess } from './pages/OrderSuccess'
 import { Profile } from './pages/Profile'
-import { Deals } from './pages/Deals'
 
 function App() {
   return (
@@ -26,7 +25,6 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/products" element={<Products />} />
-              <Route path="/deals" element={<Deals />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/order-success" element={<OrderSuccess />} />

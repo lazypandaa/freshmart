@@ -32,7 +32,7 @@ export function Header() {
 
   useEffect(() => {
     if (searchQuery.trim().length > 0) {
-      fetch(`${API_BASE_URL}/api/products?search=${searchQuery}&limit=5`)
+      fetch(`${API_BASE_URL}/api/productsnew?search=${searchQuery}&limit=5`)
         .then(res => res.json())
         .then(data => {
           const products = data.products || data
