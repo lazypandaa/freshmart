@@ -248,7 +248,7 @@ export function Profile() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {orders.length === 0 ? (
+                {!orders || orders.length === 0 ? (
                   <div className="text-center py-12">
                     <Package className="h-16 w-16 mx-auto mb-4 text-gray-300" />
                     <p className="text-gray-600 mb-4">No orders yet</p>
@@ -256,46 +256,46 @@ export function Profile() {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {orders.slice(0, 5).map((order) => (
-                      <Card key={order.id} className="border">
+                    {orders.slice(0, 5).map((order, index) => (
+                      <Card key={order.id || index} className="border">
                         <CardContent className="p-4">
                           <div className="flex justify-between items-start mb-3">
                             <div>
-                              <p className="font-semibold">Order #{order.id.slice(-8)}</p>
+                              <p className="font-semibold">Order #{(order.id || '').toString().slice(-8) || `ORD${index + 1}`}</p>
                               <p className="text-sm text-gray-600">
-                                {new Date(order.date).toLocaleDateString('en-US', {
+                                {order.date ? new Date(order.date).toLocaleDateString('en-US', {
                                   year: 'numeric',
                                   month: 'long',
                                   day: 'numeric'
-                                })}
+                                }) : 'N/A'}
                               </p>
                             </div>
                             <div className="text-right">
-                              <p className="font-bold text-lg">${order.total.toFixed(2)}</p>
+                              <p className="font-bold text-lg">${(order.total || 0).toFixed(2)}</p>
                               <span className="inline-block px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
-                                {order.status}
+                                {order.status || 'Completed'}
                               </span>
                             </div>
                           </div>
                           <div className="border-t pt-3">
                             <p className="text-sm text-gray-600 mb-2">
-                              {order.items.length} item{order.items.length > 1 ? 's' : ''}
+                              {(order.items || []).length} item{(order.items || []).length > 1 ? 's' : ''}
                             </p>
                             <div className="flex gap-2 overflow-x-auto">
-                              {order.items.slice(0, 3).map((item, idx) => (
+                              {(order.items || []).slice(0, 3).map((item, idx) => (
                                 <img
                                   key={idx}
-                                  src={item.image_url}
-                                  alt={item.name}
+                                  src={item.image_url || 'https://via.placeholder.com/48x48?text=No+Image'}
+                                  alt={item.name || 'Product'}
                                   className="w-12 h-12 object-cover rounded"
                                   onError={(e) => {
                                     e.target.src = 'https://via.placeholder.com/48x48?text=No+Image'
                                   }}
                                 />
                               ))}
-                              {order.items.length > 3 && (
+                              {(order.items || []).length > 3 && (
                                 <div className="w-12 h-12 bg-gray-100 rounded flex items-center justify-center text-xs font-semibold">
-                                  +{order.items.length - 3}
+                                  +{(order.items || []).length - 3}
                                 </div>
                               )}
                             </div>
